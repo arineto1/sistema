@@ -1,763 +1,1214 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolução Educacional - Aula 1: Adição e Subtração</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ENEM - Aula 1: Operações Fundamentais com Inteiros e Decimais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* Estilos Gerais */
-        :root {
-            --cor-primaria: #0056b3;
-            --cor-secundaria: #17a2b8;
-            --cor-sucesso: #28a745;
-            --cor-erro: #dc3545;
-            --cor-fundo: #f8f9fa;
-            --cor-texto: #212529;
-            --cor-cinza-claro: #e9ecef;
-            --cor-cinza-medio: #ced4da;
-            --cor-cinza-escuro: #6c757d;
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      .ascii-art {
+        font-family: 'Courier New', Courier, monospace;
+        white-space: pre;
+        background-color: #f3f4f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+      .resolution-box {
+        background-color: #eef2ff;
+        border-left: 4px solid #4f46e5;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+      }
+      .correct-answer {
+        background-color: #dcfce7;
+        border-left: 4px solid #22c55e;
+      }
+      .incorrect-answer {
+        background-color: #fee2e2;
+        border-left: 4px solid #ef4444;
+      }
+      .question-feedback {
+        font-weight: 600;
+      }
+      .correct-feedback {
+        color: #22c55e;
+      }
+      .incorrect-feedback {
+        color: #ef4444;
+      }
+      .locked {
+        pointer-events: none;
+        opacity: 0.6;
+      }
+      @media print {
+        body * {
+          visibility: hidden;
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            padding: 0;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
+        #print-section,
+        #print-section * {
+          visibility: visible;
         }
-        .container {
-            max-width: 850px;
-            margin: 20px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        #print-section {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
         }
-        /* Títulos e Textos */
-        h1, h2, h3, h4 {
-            color: var(--cor-primaria);
+        .no-print {
+          display: none;
         }
-        h1 { font-size: 2.3em; text-align: center; border-bottom: 3px solid var(--cor-primaria); padding-bottom: 15px; margin-bottom: 20px;}
-        h2 { font-size: 1.9em; border-bottom: 2px solid #dee2e6; padding-bottom: 10px; margin-top: 40px;}
-        h3 { font-size: 1.5em; color: var(--cor-secundaria);}
-        h4 { font-size: 1.3em; color: #343a40;}
-        p {
-            font-size: 1.1em;
-            text-align: justify;
-        }
-        strong {
-            color: var(--cor-primaria);
-        }
-        /* Blocos de Esquema Visual */
-        pre {
-            background-color: var(--cor-cinza-claro);
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 5px solid var(--cor-secundaria);
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1em;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        /* Seção de Vídeo */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* Proporção 16:9 */
-            height: 0;
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        /* Timer Pomodoro */
-        .pomodoro-timer {
-            background-color: var(--cor-cinza-claro);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .pomodoro-timer .timer-display {
-            font-size: 3em;
-            font-weight: bold;
-            color: var(--cor-primaria);
-            margin: 10px 0;
-        }
-        .pomodoro-timer .controls button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .pomodoro-timer .controls button:hover {
-            background-color: var(--cor-primaria);
-        }
-        /* Estilos do Quiz */
-        .aviso-timer {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .questao {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid var(--cor-cinza-medio);
-            border-radius: 8px;
-            background-color: #fdfdfd;
-        }
-        .questao-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-        .questao-header p {
-            font-weight: bold;
-            text-align: left;
-            margin: 0;
-            flex-grow: 1;
-        }
-        .question-timer-control button {
-            background-color: var(--cor-sucesso);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s;
-        }
-        .question-timer-control button:hover {
-            background-color: #218838;
-        }
-        .question-timer-control button:disabled {
-            background-color: var(--cor-cinza-escuro);
-            cursor: not-allowed;
-        }
-        .question-timer-display {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--cor-erro);
-            background-color: #f8d7da;
-            padding: 5px 10px;
-            border-radius: 5px;
-            min-width: 60px;
-            text-align: center;
-        }
-        .options label {
-            display: block;
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 5px;
-            border: 1px solid #dee2e6;
-            cursor: pointer;
-            transition: background-color 0.2s, border-color 0.2s;
-        }
-        .options label.disabled {
-            cursor: not-allowed;
-            background-color: var(--cor-cinza-claro);
-            opacity: 0.7;
-        }
-        .options label:hover:not(.disabled) {
-            background-color: var(--cor-cinza-claro);
-            border-color: #adb5bd;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        /* Botões */
-        .btn {
-            padding: 15px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s, opacity 0.3s;
-            flex-grow: 1;
-        }
-        #finalizarBtn {
-            display: block;
-            width: 100%;
-            margin-top: 20px;
-            background-color: #007bff;
-        }
-        #finalizarBtn:hover {
-            background-color: var(--cor-primaria);
-        }
-        #finalizarBtn:disabled {
-            background-color: var(--cor-cinza-escuro);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        .final-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        .print-btn {
-            background-color: var(--cor-sucesso);
-        }
-        .print-btn:hover {
-            background-color: #218838;
-        }
-        .back-btn {
-            background-color: var(--cor-cinza-escuro);
-        }
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-        /* Elementos Ocultos e Resultados */
-        .hidden {
-            display: none;
-        }
-        #resultado {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 1.4em;
-            font-weight: bold;
-        }
-        .resultado-acerto {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .resultado-erro {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        #gabarito {
-            margin-top: 30px;
-        }
-        .resolucao {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .resolucao strong {
-            color: var(--cor-primaria);
-        }
-        /* Estilos de Feedback para as Questões */
-        .correct {
-            background-color: #d4edda !important;
-            border-color: var(--cor-sucesso) !important;
-            font-weight: bold;
-        }
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: var(--cor-erro) !important;
-        }
-        /* Estilos para Impressão */
-        @media print {
-            body { background-color: #fff; font-size: 12pt; padding: 0; margin: 0; }
-            .container { box-shadow: none; margin: 0; padding: 0 1cm; max-width: 100%; border: none; }
-            #finalizarBtn, #quizForm, .final-actions, .video-container, .pomodoro-timer { display: none !important; }
-            #gabarito, .resolucao, #resultado { display: block !important; border: none; background-color: #fff; padding: 10px 0; page-break-before: auto; }
-            h1, h2, h3, h4 { page-break-after: avoid; }
-            p, pre, ol, ul, li, div.resolucao { page-break-inside: avoid; }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Aula 1: Operações com Números Reais (Parte 1) – Adição e Subtração</h1>
-        
-        <div class="pomodoro-timer">
-            <h3>Timer Pomodoro de Estudos</h3>
-            <div class="timer-display" id="pomodoroDisplay">25:00</div>
-            <div class="controls">
-                <button id="startPomodoro">Iniciar Foco</button>
-                <button id="pausePomodoro">Pausar</button>
-                <button id="resetPomodoro">Reiniciar</button>
-            </div>
+  </head>
+  <body class="bg-slate-50 text-slate-800">
+    <div id="print-section" class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+      <header class="text-center mb-10">
+        <h1 class="text-3xl sm:text-4xl font-bold text-indigo-700">
+          Aula 1: Operações Fundamentais com Inteiros e Decimais
+        </h1>
+        <p class="text-slate-600 mt-2">
+          A base para resolver qualquer questão de matemática no ENEM.
+        </p>
+      </header>
+
+      <!-- Seção Pomodoro Timer -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-10 no-print">
+        <h2 class="text-2xl font-bold text-center mb-4 text-indigo-600">
+          Foco Total com Pomodoro
+        </h2>
+        <div class="text-center">
+          <div
+            id="pomodoro-timer"
+            class="text-6xl font-bold text-slate-800 mb-4"
+          >
+            25:00
+          </div>
+          <div class="flex justify-center space-x-4">
+            <button
+              id="start-pomodoro"
+              class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Iniciar Foco
+            </button>
+            <button
+              id="pause-pomodoro"
+              class="bg-amber-500 text-white px-6 py-2 rounded-lg hover:bg-amber-600 transition-colors"
+            >
+              Pausar
+            </button>
+            <button
+              id="reset-pomodoro"
+              class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Resetar
+            </button>
+          </div>
+          <p class="text-sm text-slate-500 mt-4">
+            Use a técnica Pomodoro: 25 minutos de estudo focado e 5 minutos de
+            descanso.
+          </p>
         </div>
+      </div>
 
-        <section id="aula">
-            <h2>Tópico 1: Adição e Subtração com Números Inteiros</h2>
-            <h3>Conceito 1.1: A Regra de Sinais</h3>
-            <p>A regra de sinais é a base para todas as operações de soma e subtração. Ela nos diz como combinar números positivos e negativos. É fundamental entender que esta regra é diferente da regra da multiplicação. Aqui, pensamos em "dívidas" (números negativos) e "créditos" (números positivos).</p>
-            <h4>Esquema Visual (Regras de Sinais):</h4>
-            <pre>
-+-------------------------------------------------+
-|           SINAIS IGUAIS (+) e (+) ou (-) e (-)    |
-|-------------------------------------------------|
-| Ação:    SOME os valores dos números.           |
-| Sinal:   MANTENHA o mesmo sinal.                |
-| Exemplo: 5 + 3 = 8      |   -5 - 3 = -8         |
-| Analogia: Juntar duas dívidas resulta em uma dívida maior. |
-+-------------------------------------------------+
+      <main>
+        <!-- Seção 2: Dominando os Números Inteiros e a Regra de Sinais -->
+        <section id="inteiros" class="mb-12">
+          <h2 class="text-2xl font-bold border-b-2 border-indigo-200 pb-2 mb-4">
+            Dominando os Números Inteiros e a Regra de Sinais
+          </h2>
+          <p class="mb-6">
+            Números inteiros são aqueles que não possuem parte decimal (..., -3,
+            -2, -1, 0, 1, 2, 3,...). A maior dificuldade ao operar com eles está
+            na correta aplicação da regra de sinais. O método a seguir divide o
+            processo em duas etapas: primeiro, realiza-se o cálculo; depois,
+            define-se o sinal.
+          </p>
 
-+-------------------------------------------------+
-|           SINAIS DIFERENTES (+) e (-)             |
-|-------------------------------------------------|
-| Ação:    SUBTRAIA o menor valor do maior.       |
-| Sinal:   MANTENHA o sinal do MAIOR número.      |
-| Exemplo: -5 + 8 = 3     |   5 - 8 = -3          |
-| Analogia: Pagar parte de uma dívida com um crédito. |
-+-------------------------------------------------+
-            </pre>
-            <h4>Exemplo Prático (Variação de Temperatura):</h4>
-            <p><strong>Situação:</strong> Em uma cidade serrana, o dia começou com a temperatura de -4°C. Ao meio-dia, a temperatura havia subido 10°C. Qual a temperatura registrada ao meio-dia?</p>
-            <p><strong>Modelagem:</strong> A temperatura inicial era -4 e a variação foi de +10. A operação é: <code>-4 + 10</code>.</p>
-            <p><strong>Resolução Super Detalhada:</strong></p>
-            <ol>
-                <li><strong>Identificar os Sinais:</strong> Temos um número negativo (-4) e um positivo (+10). Os sinais são <strong>diferentes</strong>.</li>
-                <li><strong>Aplicar a Regra:</strong> A regra para sinais diferentes diz: "Subtraia o menor valor do maior e mantenha o sinal do maior número".</li>
-                <li><strong>Executar a Ação (Subtrair):</strong>
-                    <ul>
-                        <li>Maior valor (sem o sinal): 10</li>
-                        <li>Menor valor (sem o sinal): 4</li>
-                        <li>Subtração: <code>10 - 4 = 6</code></li>
-                    </ul>
-                </li>
-                <li><strong>Definir o Sinal:</strong>
-                    <ul>
-                        <li>O maior número é o 10, e o sinal dele é positivo (+).</li>
-                        <li>Portanto, o resultado será positivo.</li>
-                    </ul>
-                </li>
-            </ol>
-            <h4>Desenho Visual (Reta Numérica):</h4>
-            <p>Imagine uma linha com os números. Você começa no -4 e "anda" 10 casas para a direita (sentido positivo).</p>
-            <pre>
-<--|----|----|----|----|----|----|----|----|----|----|----|----|-->
-  -5   -4   -3   -2   -1    0    1    2    3    4    5    6    7
-       |                             <------------+
-       +----------------------------------------->
-             (Andando 10 unidades para a direita)
-            </pre>
-            <p><strong>Resposta:</strong> A temperatura registrada ao meio-dia foi de <strong>+6°C</strong>.</p>
-            
-            <h2>Tópico 2: Adição e Subtração com Números Decimais</h2>
-            <h3>Conceito 2.1: O Alinhamento da Vírgula</h3>
-            <p>A regra de ouro para somar ou subtrair números com vírgula é: <strong>posicionar a vírgula exatamente embaixo da vírgula</strong>. Isso alinha as casas decimais (décimos, centésimos) e as partes inteiras (unidades, dezenas), garantindo que a operação seja feita corretamente. Se um número tiver menos casas decimais que o outro, complete com zeros à direita para não se confundir.</p>
-            <h4>Esquema Visual (Alinhamento Vertical):</h4>
-            <pre>
-   Dezena | Unidade | , | Décimos | Centésimos
-   -------+---------+---+---------+-----------
-          |    5    | , |    2    |      0     <-- Complete com zero se precisar
-   -      |    1    | , |    8    |      5
-   -------+---------+---+---------+-----------
-            </pre>
-            <h4>Exemplo Prático (Calculando o Troco):</h4>
-            <p><strong>Situação:</strong> Você tem R$ 50,00 na carteira e compra um lanche que custa R$ 28,75. Quanto dinheiro sobrou?</p>
-            <p><strong>Modelagem:</strong> <code>50,00 - 28,75</code></p>
-            <p><strong>Resolução Desenhada:</strong></p>
-            <p>Vamos montar a conta, alinhando as vírgulas. Note que R$ 50 é o mesmo que R$ 50,00.</p>
-            <pre>
-  50,00
-- 28,75
---------
-            </pre>
-            <p><strong>Passo 1 (Empréstimo):</strong> `0 - 5` não é possível. "Pegamos emprestado" da casa ao lado, que também é 0. Então, pegamos do 5. O 5 vira 4, o primeiro 0 (unidade) vira 10, mas empresta 1 para o próximo, então vira 9. O segundo 0 (décimos) vira 10, mas empresta 1, então vira 9. O último 0 (centésimos) finalmente vira 10.</p>
-            <pre>
-    4  9  9  10   <-- (Números após o "empréstimo")
-  5  0, 0  0
-- 2  8, 7  5
-------------
-            </pre>
-            <p><strong>Passo 2 (Resolver da direita para a esquerda):</strong></p>
-            <pre>
-    4  9  9  10
-  5  0, 0  0
-- 2  8, 7  5
-------------
-  2  1, 2  5
-            </pre>
-            <p><strong>Resposta:</strong> Sobraram <strong>R$ 21,25</strong>.</p>
-
-            <h2>Tópico 3: Adição e Subtração com Frações</h2>
-            <h3>Conceito 3.1: O Desafio dos Denominadores Diferentes</h3>
-            <p>Para somar ou subtrair frações, os denominadores (números de baixo) devem ser iguais. Pense que você não pode somar fatias de pizzas que foram cortadas em tamanhos diferentes. Primeiro, você precisa "recortar" as pizzas para que todas as fatias tenham o mesmo tamanho. Esse "tamanho comum" é o MMC (Mínimo Múltiplo Comum).</p>
-            <h4>Exemplo Prático (Completando uma Tarefa):</h4>
-            <p><strong>Situação:</strong> Um estudante fez 1/3 de um trabalho de história em um dia e 1/5 no dia seguinte. Que fração do trabalho ele já completou no total?</p>
-            <p><strong>Modelagem:</strong> <code>1/3 + 1/5</code></p>
-            <p><strong>Resolução Super Detalhada:</strong></p>
-            <ol>
-                <li><strong>Encontrar o MMC dos denominadores (3 e 5):</strong>
-                    <ul>
-                        <li>Múltiplos de 3: 3, 6, 9, 12, <strong>15</strong>...</li>
-                        <li>Múltiplos de 5: 5, 10, <strong>15</strong>...</li>
-                        <li>O MMC(3, 5) é <strong>15</strong>. Este será nosso novo denominador.</li>
-                    </ul>
-                </li>
-                <li><strong>Ajustar a primeira fração (1/3):</strong>
-                    <ul><li>Divida o novo denominador (15) pelo antigo (3): `15 ÷ 3 = 5`.</li><li>Multiplique o resultado (5) pelo numerador antigo (1): `5 * 1 = 5`.</li><li>A nova fração é <strong>5/15</strong>.</li></ul>
-                </li>
-                <li><strong>Ajustar a segunda fração (1/5):</strong>
-                     <ul><li>Divida o novo denominador (15) pelo antigo (5): `15 ÷ 5 = 3`.</li><li>Multiplique o resultado (3) pelo numerador antigo (1): `3 * 1 = 3`.</li><li>A nova fração é <strong>3/15</strong>.</li></ul>
-                </li>
-                <li><strong>Somar as frações ajustadas:</strong></li>
-            </ol>
-            <pre>
-   5      3      5 + 3      8
-  --- + ---  =  -------  =  ----
-  15     15       15        15
-            </pre>
-            <p><strong>Resposta:</strong> Ele já completou <strong>8/15</strong> do trabalho.</p>
-        </section>
-
-        <section id="video-aula">
-            <h2>Vídeo Aula Complementar</h2>
-            <div class="video-container">
-                <!-- Para usar, substitua o 'SEU_CODIGO_DO_YOUTUBE' pelo código do vídeo. Ex: se o link é https://www.youtube.com/watch?v=dQw4w9WgXcQ, o código é dQw4w9WgXcQ -->
-                <iframe 
-                    width="560" 
-                    height="315" 
-                    src="https://www.youtube.com/embed/SEU_CODIGO_DO_YOUTUBE" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+          <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-3">
+              Adição e Subtração — Juntando Forças e Medindo Diferenças
+            </h3>
+            <p class="mb-4">
+              A regra para somar e subtrair números inteiros pode ser resumida
+              em duas sentenças:
+            </p>
+            <ul
+              class="list-disc list-inside space-y-2 mb-4 pl-4 bg-indigo-50 p-4 rounded-md"
+            >
+              <li>
+                <strong>Sinais Iguais:</strong> Some os valores dos números e
+                mantenha o sinal original. Pense: "tenho uma dívida (-5) e faço
+                outra (-10), minha dívida aumenta para -15".
+              </li>
+              <li>
+                <strong>Sinais Diferentes:</strong> Subtraia o maior valor pelo
+                menor valor e, no resultado, use o sinal do número de maior
+                valor. Pense: "tenho 50 reais (+50) e pago uma conta de 80
+                (-80), fico devendo 30 (-30)".
+              </li>
+            </ul>
+            <h4 class="font-semibold mt-6 mb-2">Diagrama Visual de Decisão:</h4>
+            <div class="ascii-art">
+              Iniciando a operação... | V Os sinais são iguais? / \ (SIM) / \
+              (NÃO) / \ V V Some os valores. Subtraia (Maior - Menor). Mantenha
+              o sinal. Use o sinal do número de MAIOR VALOR.
             </div>
+            <div class="resolution-box mt-6">
+              <h4 class="font-semibold text-lg mb-2">Exemplo Prático:</h4>
+              <p class="mb-4">
+                Uma pessoa tem R$ 50,00 em sua conta bancária (saldo $+50$). Ela
+                precisa pagar uma conta no valor de R$ 80,00 (o que representa
+                uma retirada de 80, ou uma soma com $-80$). Qual será o novo
+                saldo da conta?
+              </p>
+              <h5 class="font-semibold mb-2">Resolução Visual Detalhada:</h5>
+              <p>
+                <strong>Passo 1: Identificar a operação.</strong> A operação é:
+                $50 - 80$, ou, de forma equivalente, $(+50) + (-80)$.
+              </p>
+              <p>
+                <strong>Passo 2: Analisar os sinais.</strong> Os números são
+                $+50$ e $-80$. Os sinais são <strong>DIFERENTES</strong>.
+              </p>
+              <p>
+                <strong>Passo 3: Aplicar a regra do fluxograma.</strong> Para
+                sinais diferentes, a regra é: "Subtraia (Maior - Menor)". O
+                maior valor é 80 e o menor é 50.
+              </p>
+              <p>
+                <strong>Passo 4: Montar e resolver o cálculo numérico.</strong>
+                A conta é montada com o maior valor em cima, como no papel.
+              </p>
+              <div class="ascii-art">
+                80 &lt;-- O número de maior valor (sem considerar o sinal) - 50
+                ---- 30
+              </div>
+              <p>
+                <strong>Passo 5: Definir o sinal do resultado.</strong> A regra
+                continua: "...e use o sinal do MAIOR número". Entre 80 e 50, o
+                maior é 80. O sinal original do 80 na operação era negativo
+                ($-$). Portanto, o resultado final é negativo.
+              </p>
+              <p class="font-bold mt-4">
+                Resposta: O resultado é $-30$. O novo saldo da conta é de -R$
+                30,00, o que significa que a pessoa está com a conta negativa,
+                devendo R$ 30,00 ao banco.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-3">
+              Multiplicação e Divisão — O Jogo de Sinais
+            </h3>
+            <p class="mb-4">
+              Para multiplicação e divisão, a regra de sinais é ainda mais
+              direta e pode ser memorizada facilmente. A lógica é a seguinte:
+            </p>
+            <ul
+              class="list-disc list-inside space-y-2 mb-4 pl-4 bg-indigo-50 p-4 rounded-md"
+            >
+              <li>
+                Sinais <strong>iguais</strong> sempre resultam em um número
+                <strong>POSITIVO</strong> ($+$).
+              </li>
+              <li>
+                Sinais <strong>diferentes</strong> sempre resultam em um número
+                <strong>NEGATIVO</strong> ($-$).
+              </li>
+            </ul>
+            <h4 class="font-semibold mt-6 mb-2">Diagrama Visual de Decisão:</h4>
+            <div class="ascii-art">
+              +-------------------------------------------+ | REGRA DE SINAIS
+              (Multiplicação e Divisão) |
+              +---------------------+---------------------+ | OPERAÇÃO |
+              RESULTADO | +---------------------+---------------------+ | (+)
+              com (+) | (+) | | (-) com (-) | (+) | <-- Sinais IGUAIS = POSITIVO
+              +---------------------+---------------------+ | (+) com (-) | (-)
+              | | (-) com (+) | (-) | <-- Sinais DIFERENTES = NEGATIVO
+              +---------------------+---------------------+
+            </div>
+            <div class="resolution-box mt-6">
+              <h4 class="font-semibold text-lg mb-2">Exemplo Prático:</h4>
+              <p class="mb-4">
+                Uma dívida total de R$ 200,00 será dividida igualmente entre 4
+                amigos. Qual valor numérico representa a situação financeira de
+                cada amigo em relação a essa dívida?
+              </p>
+              <h5 class="font-semibold mb-2">Resolução Visual Detalhada:</h5>
+              <p>
+                <strong>Passo 1: Identificar os números e seus sinais.</strong>
+                A dívida é um valor negativo: $-200$. O número de amigos é um
+                valor positivo: $+4$.
+              </p>
+              <p>
+                <strong>Passo 2: Identificar a operação.</strong> A operação é
+                uma <strong>DIVISÃO</strong>: $(-200) \div (+4)$.
+              </p>
+              <p>
+                <strong
+                  >Passo 3: Resolver o cálculo numérico, ignorando os
+                  sinais.</strong
+                >
+                Primeiro, divide-se 200 por 4.
+              </p>
+              <div class="ascii-art">
+                200 | 4 -20 '---- 00 50 &lt;-- Resultado numérico -0 -- 0
+              </div>
+              <p>
+                <strong
+                  >Passo 4: Definir o sinal do resultado usando a
+                  tabela.</strong
+                >
+                A operação envolve um número <strong>NEGATIVO</strong> ($-200$)
+                e um <strong>POSITIVO</strong> ($+4$). Os sinais são
+                <strong>DIFERENTES</strong>. De acordo com a tabela, o resultado
+                deve ser <strong>NEGATIVO</strong>.
+              </p>
+              <p class="font-bold mt-4">
+                Resposta: O resultado é $-50$. A situação de cada amigo é
+                representada por -R$ 50,00, ou seja, cada um passa a ter uma
+                dívida de R$ 50,00.
+              </p>
+            </div>
+          </div>
         </section>
 
-        <section id="exercicios">
-            <h2>Exercícios de Fixação – Aula 1</h2>
-            <div class="aviso-timer">Antes de começar a ler cada questão, ative o timer!</div>
-            <form id="quizForm">
-                <div class="questao" id="q1-container">
-                    <div class="questao-header">
-                        <p><strong>Questão 1:</strong> Um mergulhador estava a uma profundidade de -18 metros em relação ao nível do mar. Ele desceu mais 7 metros e, em seguida, subiu 12 metros para observar um cardume de peixes. A profundidade final do mergulhador, em metros, foi de:</p>
-                        <div class="question-timer-control">
-                            <button type="button" id="start-timer-q1">Ativar Timer</button>
-                            <span class="question-timer-display" id="timer-q1">03:00</span>
-                        </div>
-                    </div>
-                    <div class="options" id="options-q1">
-                        <label><input type="radio" name="q1" value="A"> (A) -37</label>
-                        <label><input type="radio" name="q1" value="B"> (B) -25</label>
-                        <label><input type="radio" name="q1" value="C"> (C) -13</label>
-                        <label><input type="radio" name="q1" value="D"> (D) -6</label>
-                        <label><input type="radio" name="q1" value="E"> (E) 1</label>
-                    </div>
-                </div>
+        <!-- Seção 3: Dominando os Números Decimais -->
+        <section id="decimais" class="mb-12">
+          <h2 class="text-2xl font-bold border-b-2 border-indigo-200 pb-2 mb-4">
+            Dominando os Números Decimais — A Vírgula no Lugar Certo
+          </h2>
+          <p class="mb-6">
+            Números decimais são aqueles que possuem uma parte inteira e uma
+            parte fracionária, separadas por uma vírgula. A chave para operar
+            com eles é o correto posicionamento da vírgula.
+          </p>
 
-                <div class="questao" id="q2-container">
-                     <div class="questao-header">
-                        <p><strong>Questão 2:</strong> O saldo da conta bancária de Joana no início do dia era de R$ 350,80. Durante a manhã, ela pagou uma conta de luz no valor de R$ 95,45. À tarde, recebeu um depósito de R$ 120,00. O saldo final na conta de Joana foi de:</p>
-                        <div class="question-timer-control">
-                            <button type="button" id="start-timer-q2">Ativar Timer</button>
-                            <span class="question-timer-display" id="timer-q2">03:00</span>
-                        </div>
-                    </div>
-                    <div class="options" id="options-q2">
-                        <label><input type="radio" name="q2" value="A"> (A) R$ 135,35</label>
-                        <label><input type="radio" name="q2" value="B"> (B) R$ 375,35</label>
-                        <label><input type="radio" name="q2" value="C"> (C) R$ 385,45</label>
-                        <label><input type="radio" name="q2" value="D"> (D) R$ 416,25</label>
-                        <label><input type="radio" name="q2" value="E"> (E) R$ 566,25</label>
-                    </div>
-                </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-3">
+              Adição e Subtração com Decimais
+            </h3>
+            <p class="mb-4">
+              A regra de ouro, que resolve todas as operações de adição e
+              subtração com decimais, é:
+              <strong>VÍRGULA EMBAIXO DE VÍRGULA</strong>. Ao alinhar as
+              vírgulas, garante-se que as unidades estão sendo somadas com
+              unidades, os décimos com décimos, os centésimos com centésimos, e
+              assim por diante. Caso um número tenha menos casas decimais que o
+              outro, pode-se completar com zeros à direita para facilitar a
+              visualização, sem alterar o valor do número.
+            </p>
+            <h4 class="font-semibold mt-6 mb-2">
+              Diagrama Visual de Alinhamento:
+            </h4>
+            <p class="mb-2">Para resolver o problema $12,5 + 3,75 + 8$:</p>
+            <div class="ascii-art">
+              Passo 1: Reescrever os números, alinhando pela vírgula. Lembre-se:
+              8 é o mesmo que 8,00. 12,50 &lt;-- Completamos com um zero para
+              alinhar. 3,75 + 8,00 &lt;-- Colocamos a vírgula e os zeros para
+              alinhar. --------
+            </div>
+            <div class="resolution-box mt-6">
+              <h4 class="font-semibold text-lg mb-2">Exemplo Prático:</h4>
+              <p class="mb-4">
+                Em uma compra de supermercado, os itens custam R$ 14,80, R$ 7,25
+                e R$ 5,50. Qual é o valor total da compra?
+              </p>
+              <h5 class="font-semibold mb-2">Resolução Visual Detalhada:</h5>
+              <p>
+                <strong
+                  >Passo 1: Montar a conta com alinhamento perfeito (VÍRGULA
+                  EMBAIXO DE VÍRGULA).</strong
+                >
+              </p>
+              <div class="ascii-art">
+                1 1 &lt;-- Números que "sobem" na soma 14,80 7,25 + 5,50 -------
+                27,55 &lt;-- A vírgula desce reto para a mesma posição.
+              </div>
+              <p>
+                <strong
+                  >Passo 2: Somar cada coluna, da direita para a
+                  esquerda.</strong
+                >
+              </p>
+              <ul class="list-decimal list-inside space-y-1 mt-2">
+                <li>Coluna dos centésimos: $0 + 5 + 0 = 5$.</li>
+                <li>
+                  Coluna dos décimos: $8 + 2 + 5 = 15$ (escreve-se o 5 e "sobe"
+                  o 1).
+                </li>
+                <li>
+                  Coluna das unidades: $1 (\text{que subiu}) + 4 + 7 + 5 = 17$
+                  (escreve-se o 7 e "sobe" o 1).
+                </li>
+                <li>Coluna das dezenas: $1 (\text{que subiu}) + 1 = 2$.</li>
+              </ul>
+              <p class="font-bold mt-4">
+                Resposta: O valor total da compra é R$ 27,55.
+              </p>
+            </div>
+          </div>
 
-                <div class="questao" id="q3-container">
-                     <div class="questao-header">
-                        <p><strong>Questão 3:</strong> Para um projeto escolar, Carlos e Daniela decidiram dividir a tarefa de escrever um relatório. No primeiro dia, Carlos escreveu 1/3 do total de páginas. No segundo dia, Daniela escreveu 2/5 do total de páginas. A fração do relatório que os dois já escreveram juntos é:</p>
-                        <div class="question-timer-control">
-                            <button type="button" id="start-timer-q3">Ativar Timer</button>
-                            <span class="question-timer-display" id="timer-q3">03:00</span>
-                        </div>
-                    </div>
-                    <div class="options" id="options-q3">
-                        <label><input type="radio" name="q3" value="A"> (A) 3/8</label>
-                        <label><input type="radio" name="q3" value="B"> (B) 2/15</label>
-                        <label><input type="radio" name="q3" value="C"> (C) 7/15</label>
-                        <label><input type="radio" name="q3" value="D"> (D) 11/15</label>
-                        <label><input type="radio" name="q3" value="E"> (E) 13/15</label>
-                    </div>
-                </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-3">
+              Multiplicação com Decimais
+            </h3>
+            <p class="mb-4">
+              A multiplicação com decimais segue um processo de três passos
+              simples:
+            </p>
+            <ol
+              class="list-decimal list-inside space-y-2 mb-4 pl-4 bg-indigo-50 p-4 rounded-md"
+            >
+              <li>
+                <strong>Ignore as vírgulas:</strong> Monte e resolva a
+                multiplicação como se os números fossem inteiros.
+              </li>
+              <li>
+                <strong>Conte as casas decimais:</strong> Some o total de casas
+                decimais (os algarismos que vêm depois da vírgula) dos dois
+                números que foram multiplicados.
+              </li>
+              <li>
+                <strong>Posicione a vírgula:</strong> No resultado final,
+                posicione a vírgula de forma que o número de casas decimais seja
+                igual ao total contado no passo 2. A contagem é feita da direita
+                para a esquerda.
+              </li>
+            </ol>
+            <h4 class="font-semibold mt-6 mb-2">
+              Diagrama Visual do Processo:
+            </h4>
+            <p class="mb-2">Para multiplicar $3,77 \times 2,1$:</p>
+            <div class="ascii-art">
+              Multiplicar 3,77 x 2,1 | V Passo 1: Multiplicar sem vírgulas (377
+              x 21) | V 377 x 21 ----- 377 +754 ----- 7917 | V Passo 2: Contar
+              casas decimais 3,77 --> 2 casas 2,1 --> 1 casa -----------------
+              TOTAL --> 3 casas | V Passo 3: Posicionar a vírgula no resultado
+              (andar 3 casas da direita para a esquerda) 7917. --> 791.7 -->
+              79.17 --> 7.917
+            </div>
+            <div class="resolution-box mt-6">
+              <h4 class="font-semibold text-lg mb-2">Exemplo Prático:</h4>
+              <p class="mb-4">
+                Para cobrir o piso de uma sala retangular, é preciso calcular
+                sua área. A sala mede 4,5 metros de comprimento por 3,2 metros
+                de largura. Quantos metros quadrados de carpete são necessários?
+                (Lembre-se: Área do retângulo = comprimento $\times$ largura).
+              </p>
+              <h5 class="font-semibold mb-2">Resolução Visual Detalhada:</h5>
+              <p>
+                <strong
+                  >Passo 1: Multiplicar os números como se fossem inteiros (45 x
+                  32).</strong
+                >
+              </p>
+              <div class="ascii-art">
+                45 x 32 ---- 90 &lt;-- Resultado de 2 x 45 + 135 &lt;--
+                Resultado de 3 x 45 (com um espaço à direita) ---- 1440
+              </div>
+              <p><strong>Passo 2: Contar o total de casas decimais.</strong></p>
+              <ul class="list-disc list-inside space-y-1">
+                <li>
+                  O número 4,<strong>5</strong> tem <strong>UMA</strong> casa
+                  decimal.
+                </li>
+                <li>
+                  O número 3,<strong>2</strong> tem <strong>UMA</strong> casa
+                  decimal.
+                </li>
+                <li>Total: $1 + 1 = \text{DUAS}$ casas decimais.</li>
+              </ul>
+              <p class="mt-2">
+                <strong
+                  >Passo 3: Posicionar a vírgula no resultado (1440).</strong
+                >
+                O resultado deve ter <strong>DUAS</strong> casas decimais. A
+                contagem é feita da direita para a esquerda.
+              </p>
+              <div class="ascii-art">
+                1440 --> 144,0 --> 14,40 ^ ^ (1 casa) (2 casas)
+              </div>
+              <p class="font-bold mt-4">
+                Resposta: São necessários 14,40 (ou 14,4) metros quadrados de
+                carpete.
+              </p>
+            </div>
+          </div>
 
-                <div class="questao" id="q4-container">
-                     <div class="questao-header">
-                        <p><strong>Questão 4:</strong> Uma caixa d'água continha 3/4 de sua capacidade total. Durante o dia, foi consumido 1/6 da capacidade <strong>total</strong> da caixa. A fração da capacidade total que restou na caixa d'água no final do dia foi de:</p>
-                        <div class="question-timer-control">
-                            <button type="button" id="start-timer-q4">Ativar Timer</button>
-                            <span class="question-timer-display" id="timer-q4">03:00</span>
-                        </div>
-                    </div>
-                    <div class="options" id="options-q4">
-                        <label><input type="radio" name="q4" value="A"> (A) 2/10</label>
-                        <label><input type="radio" name="q4" value="B"> (B) 1/12</label>
-                        <label><input type="radio" name="q4" value="C"> (C) 5/12</label>
-                        <label><input type="radio" name="q4" value="D"> (D) 7/12</label>
-                        <label><input type="radio" name="q4" value="E"> (E) 11/12</label>
-                    </div>
-                </div>
-                
-                <div class="questao" id="q5-container">
-                     <div class="questao-header">
-                        <p><strong>Questão 5:</strong> A temperatura em uma cidade em um dia de inverno foi medida três vezes. Pela manhã, era de -3,5°C. Ao meio-dia, a temperatura havia subido 8,0°C. No final da noite, ela caiu 10,5°C em relação à temperatura do meio-dia. A temperatura registrada no final da noite foi de:</p>
-                        <div class="question-timer-control">
-                            <button type="button" id="start-timer-q5">Ativar Timer</button>
-                            <span class="question-timer-display" id="timer-q5">03:00</span>
-                        </div>
-                    </div>
-                    <div class="options" id="options-q5">
-                        <label><input type="radio" name="q5" value="A"> (A) -6,0°C</label>
-                        <label><input type="radio" name="q5" value="B"> (B) -4,5°C</label>
-                        <label><input type="radio" name="q5" value="C"> (C) -2,0°C</label>
-                        <label><input type="radio" name="q5" value="D"> (D) 1,0°C</label>
-                        <label><input type="radio" name="q5" value="E"> (E) 4,5°C</label>
-                    </div>
-                </div>
-            </form>
-
-            <button id="finalizarBtn" class="btn">Finalizar e Ver Resultado</button>
-
-            <div id="resultado" class="hidden"></div>
-
-            <section id="gabarito" class="hidden">
-                <h2>Gabarito Comentado e Super Detalhado</h2>
-                
-                <div class="resolucao">
-                    <p><strong>Questão 1: Alternativa (C)</strong></p>
-                    <p><strong>Raciocínio:</strong> Seguir as movimentações do mergulhador passo a passo.</p>
-                    <p><strong>Modelagem:</strong> <code>-18 - 7 + 12</code></p>
-                    <ol>
-                        <li><strong>Primeiro Movimento (Descer):</strong> <code>-18 - 7</code>. Sinais iguais, somamos e mantemos o sinal. Resultado: <strong>-25 metros</strong>.</li>
-                        <li><strong>Segundo Movimento (Subir):</strong> <code>-25 + 12</code>. Sinais diferentes, subtraímos e mantemos o sinal do maior. Resultado: <strong>-13 metros</strong>.</li>
-                    </ol>
-                </div>
-
-                <div class="resolucao">
-                    <p><strong>Questão 2: Alternativa (B)</strong></p>
-                    <p><strong>Raciocínio:</strong> Calcular o saldo após cada transação, na ordem dos acontecimentos.</p>
-                    <p><strong>Modelagem:</strong> `350,80 - 95,45 + 120,00`</p>
-                    <ol>
-                        <li><strong>Pagamento da conta (Subtração):</strong> `350,80 - 95,45 = 255,35`. Saldo: <strong>R$ 255,35</strong>.</li>
-                        <li><strong>Depósito (Adição):</strong> `255,35 + 120,00 = 375,35`. Saldo final: <strong>R$ 375,35</strong>.</li>
-                    </ol>
-                </div>
-
-                <div class="resolucao">
-                    <p><strong>Questão 3: Alternativa (D)</strong></p>
-                    <p><strong>Raciocínio:</strong> Somar as frações com denominadores diferentes (3 e 5) usando o MMC.</p>
-                    <p><strong>Modelagem:</strong> `1/3 + 2/5`</p>
-                    <ol>
-                        <li><strong>MMC(3, 5):</strong> O MMC é <strong>15</strong>.</li>
-                        <li><strong>Ajustar 1/3:</strong> `(15 ÷ 3) * 1 = 5`. A fração se torna `5/15`.</li>
-                        <li><strong>Ajustar 2/5:</strong> `(15 ÷ 5) * 2 = 6`. A fração se torna `6/15`.</li>
-                        <li><strong>Somar:</strong> `5/15 + 6/15 = 11/15`.</li>
-                    </ol>
-                </div>
-
-                <div class="resolucao">
-                    <p><strong>Questão 4: Alternativa (D)</strong></p>
-                    <p><strong>Raciocínio:</strong> Subtrair a fração consumida da fração inicial. Denominadores (4 e 6) são diferentes, então usamos o MMC.</p>
-                    <p><strong>Modelagem:</strong> `3/4 - 1/6`</p>
-                     <ol>
-                        <li><strong>MMC(4, 6):</strong> O MMC é <strong>12</strong>.</li>
-                        <li><strong>Ajustar 3/4:</strong> `(12 ÷ 4) * 3 = 9`. A fração se torna `9/12`.</li>
-                        <li><strong>Ajustar 1/6:</strong> `(12 ÷ 6) * 1 = 2`. A fração se torna `2/12`.</li>
-                        <li><strong>Subtrair:</strong> `9/12 - 2/12 = 7/12`.</li>
-                    </ol>
-                </div>
-                 <div class="resolucao">
-                    <p><strong>Questão 5: Alternativa (A)</strong></p>
-                    <p><strong>Raciocínio:</strong> Calcular a temperatura em cada etapa do dia, em ordem.</p>
-                    <p><strong>Modelagem:</strong> `(-3,5 + 8,0) - 10,5`</p>
-                    <ol>
-                        <li><strong>Temperatura ao meio-dia:</strong> `-3,5 + 8,0`. Sinais diferentes, subtraímos (8,0 - 3,5 = 4,5) e mantemos o sinal do maior (positivo). Temperatura ao meio-dia: <strong>+4,5°C</strong>.</li>
-                        <li><strong>Temperatura final:</strong> `+4,5 - 10,5`. Sinais diferentes, subtraímos (10,5 - 4,5 = 6,0) e mantemos o sinal do maior (negativo). Temperatura final: <strong>-6,0°C</strong>.</li>
-                    </ol>
-                </div>
-
-                <div class="final-actions">
-                    <a href="aulas.html" class="btn back-btn">Voltar para o Menu de Aulas</a>
-                    <button type="button" id="printBtnFinal" class="btn print-btn">Salvar como PDF ou Imprimir</button>
-                </div>
-            </section>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-xl font-semibold text-indigo-700 mb-3">
+              Divisão com Decimais
+            </h3>
+            <p class="mb-4">
+              O objetivo na divisão com decimais é transformar a operação em uma
+              divisão de números inteiros, o que simplifica o processo. A regra
+              é:
+            </p>
+            <ol
+              class="list-decimal list-inside space-y-2 mb-4 pl-4 bg-indigo-50 p-4 rounded-md"
+            >
+              <li>
+                <strong>Igualar as casas decimais:</strong> Observe o dividendo
+                e o divisor. Acrescente zeros à direita do número que tiver
+                menos casas decimais, até que ambos tenham a mesma quantidade.
+              </li>
+              <li>
+                <strong>Eliminar as vírgulas:</strong> Uma vez que o número de
+                casas decimais está igualado, as vírgulas podem ser simplesmente
+                removidas.
+              </li>
+              <li>
+                <strong>Dividir:</strong> Realize a divisão com os novos números
+                inteiros.
+              </li>
+            </ol>
+            <h4 class="font-semibold mt-6 mb-2">
+              Diagrama Visual de Transformação:
+            </h4>
+            <p class="mb-2">Para dividir $7,5$ por $0,25$:</p>
+            <div class="ascii-art">
+              Problema Original: 7,5 / 0,25 7,5 (1 casa decimal) / 0,25 (2 casas
+              decimais) Passo 1: Igualar as casas. O 0,25 tem 2 casas, então o
+              7,5 precisa de 2 também. Ele se torna 7,50. 7,50 (2 casas
+              decimais) / 0,25 (2 casas decimais) Passo 2: As casas estão
+              iguais. Agora, corte as vírgulas. A conta se transforma em: 750 /
+              25.
+            </div>
+            <div class="resolution-box mt-6">
+              <h4 class="font-semibold text-lg mb-2">Exemplo Prático:</h4>
+              <p class="mb-4">
+                A conta de um jantar entre 5 amigos deu R$ 182,50. Se o valor
+                for dividido igualmente, quanto cada um deve pagar?
+              </p>
+              <h5 class="font-semibold mb-2">Resolução Visual Detalhada:</h5>
+              <p>
+                <strong>Passo 1: Identificar a operação e os números.</strong> A
+                operação é $182,5 \div 5$.
+              </p>
+              <p>
+                <strong>Passo 2: Igualar o número de casas decimais.</strong>
+              </p>
+              <ul class="list-disc list-inside space-y-1">
+                <li>$182,5$ tem <strong>UMA</strong> casa decimal.</li>
+                <li>
+                  $5$ (que é o mesmo que $5,0$) tem <strong>UMA</strong> casa
+                  decimal após o ajuste.
+                </li>
+              </ul>
+              <p class="mt-2">
+                <strong>Passo 3: Eliminar as vírgulas.</strong> Como ambos os
+                números têm uma casa decimal ($182,5$ e $5,0$), as vírgulas são
+                removidas. A nova conta é: $1825 \div 50$.
+              </p>
+              <p><strong>Passo 4: Resolver a divisão de inteiros.</strong></p>
+              <div class="ascii-art">
+                1825 | 50 -150 '------ --- 36,5 325 -300 ---- 250 &lt;-- Como 25
+                é menor que 50, adiciona-se vírgula ' no quociente e um zero no
+                resto. -250 ---- 0
+              </div>
+              <p class="font-bold mt-4">
+                Resposta: Cada amigo deve pagar R$ 36,50.
+              </p>
+            </div>
+          </div>
         </section>
+
+        <!-- Seção Vídeo Aula -->
+        <section id="video-aula" class="mb-12">
+          <h2 class="text-2xl font-bold border-b-2 border-indigo-200 pb-2 mb-4">
+            Vídeo Aula Complementar
+          </h2>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <p class="text-slate-600 mb-4">
+              Para reforçar o aprendizado, assista à vídeo aula abaixo. Ela
+              explica os conceitos com animações e exemplos adicionais.
+            </p>
+            <div
+              id="video-placeholder"
+              class="bg-gray-200 aspect-video w-full rounded-lg flex items-center justify-center"
+            >
+              <iframe
+                class="w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/gk1wj5u9ggM"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </section>
+
+        <!-- Seção de Exercícios -->
+        <section id="exercicios" class="mb-12 no-print">
+          <h2 class="text-2xl font-bold border-b-2 border-indigo-200 pb-2 mb-4">
+            Pratique com Questões Estilo ENEM
+          </h2>
+          <div
+            class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded-md"
+            role="alert"
+          >
+            <p class="font-bold">Atenção!</p>
+            <p>
+              Antes de começar a ler cada questão, ative o cronômetro. Você terá
+              3 minutos por questão, o tempo médio do ENEM. Se o tempo acabar, a
+              questão será bloqueada e considerada errada.
+            </p>
+          </div>
+
+          <form id="quiz-form">
+            <!-- Questão 1 -->
+            <div
+              class="bg-white p-6 rounded-lg shadow-sm mb-6 question-container"
+            >
+              <p class="font-semibold mb-4">
+                Questão 1: Em uma cidade no sul do Brasil, a temperatura às 6h
+                da manhã era de -3,5 °C. Ao meio-dia, o sol forte elevou a
+                temperatura em 10 °C. No entanto, uma frente fria chegou no
+                final da tarde, e às 18h, a temperatura havia caído 8,5 °C em
+                relação ao meio-dia. Qual era a temperatura na cidade às 18h?
+              </p>
+              <div class="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  class="start-timer-btn bg-green-600 text-white px-4 py-1 rounded-md text-sm"
+                >
+                  Iniciar Timer
+                </button>
+                <div class="question-timer text-lg font-bold text-red-600">
+                  03:00
+                </div>
+              </div>
+              <div class="space-y-3 options-container">
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q1" value="A" class="mr-3" /> (A)
+                  -2,0 °C</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q1" value="B" class="mr-3" /> (B)
+                  -1,0 °C</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q1" value="C" class="mr-3" /> (C)
+                  1,5 °C</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q1" value="D" class="mr-3" /> (D)
+                  2,0 °C</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q1" value="E" class="mr-3" /> (E)
+                  6,5 °C</label
+                >
+              </div>
+              <div class="question-feedback mt-3"></div>
+            </div>
+
+            <!-- Questão 2 -->
+            <div
+              class="bg-white p-6 rounded-lg shadow-sm mb-6 question-container"
+            >
+              <p class="font-semibold mb-4">
+                Questão 2: Para uma pequena reforma, Joana comprou 3,5 metros de
+                um fio elétrico que custa R$ 2,80 por metro e 4 pacotes de
+                parafusos, custando R$ 5,25 cada pacote. Ao pagar, ela deu uma
+                nota de R$ 50,00. Qual foi o troco recebido por Joana?
+              </p>
+              <div class="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  class="start-timer-btn bg-green-600 text-white px-4 py-1 rounded-md text-sm"
+                >
+                  Iniciar Timer
+                </button>
+                <div class="question-timer text-lg font-bold text-red-600">
+                  03:00
+                </div>
+              </div>
+              <div class="space-y-3 options-container">
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q2" value="A" class="mr-3" /> (A)
+                  R$ 19,20</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q2" value="B" class="mr-3" /> (B)
+                  R$ 21,00</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q2" value="C" class="mr-3" /> (C)
+                  R$ 30,80</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q2" value="D" class="mr-3" /> (D)
+                  R$ 39,00</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q2" value="E" class="mr-3" /> (E)
+                  R$ 18,20</label
+                >
+              </div>
+              <div class="question-feedback mt-3"></div>
+            </div>
+
+            <!-- Questão 3 -->
+            <div
+              class="bg-white p-6 rounded-lg shadow-sm mb-6 question-container"
+            >
+              <p class="font-semibold mb-4">
+                Questão 3: O tanque de combustível de um carro, com capacidade
+                total para 50 litros, estava completamente cheio. Após percorrer
+                uma certa distância em uma viagem, o motorista parou em um posto
+                e conseguiu colocar 32,5 litros de combustível para enchê-lo
+                novamente. Sabendo que o carro percorreu 422,5 quilômetros nesse
+                trajeto, qual foi o consumo médio do veículo, em quilômetros por
+                litro?
+              </p>
+              <div class="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  class="start-timer-btn bg-green-600 text-white px-4 py-1 rounded-md text-sm"
+                >
+                  Iniciar Timer
+                </button>
+                <div class="question-timer text-lg font-bold text-red-600">
+                  03:00
+                </div>
+              </div>
+              <div class="space-y-3 options-container">
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q3" value="A" class="mr-3" /> (A)
+                  11,5 km/L</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q3" value="B" class="mr-3" /> (B)
+                  12,0 km/L</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q3" value="C" class="mr-3" /> (C)
+                  13,0 km/L</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q3" value="D" class="mr-3" /> (D)
+                  14,5 km/L</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q3" value="E" class="mr-3" /> (E)
+                  8,45 km/L</label
+                >
+              </div>
+              <div class="question-feedback mt-3"></div>
+            </div>
+
+            <!-- Questão 4 -->
+            <div
+              class="bg-white p-6 rounded-lg shadow-sm mb-6 question-container"
+            >
+              <p class="font-semibold mb-4">
+                Questão 4: Um entregador está em um prédio comercial. Ele pega o
+                elevador no 3º subsolo (andar -3) e sobe 11 andares para fazer a
+                primeira entrega. Em seguida, ele desce 5 andares para a segunda
+                entrega. Depois, desce mais 7 andares para a terceira entrega.
+                Por fim, ele sobe 2 andares para buscar um documento. Em qual
+                andar o entregador se encontra ao final do percurso?
+              </p>
+              <div class="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  class="start-timer-btn bg-green-600 text-white px-4 py-1 rounded-md text-sm"
+                >
+                  Iniciar Timer
+                </button>
+                <div class="question-timer text-lg font-bold text-red-600">
+                  03:00
+                </div>
+              </div>
+              <div class="space-y-3 options-container">
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q4" value="A" class="mr-3" /> (A)
+                  -2 (2º subsolo)</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q4" value="B" class="mr-3" /> (B)
+                  -1 (1º subsolo)</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q4" value="C" class="mr-3" /> (C) 0
+                  (térreo)</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q4" value="D" class="mr-3" /> (D) 1
+                  (1º andar)</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q4" value="E" class="mr-3" /> (E) 2
+                  (2º andar)</label
+                >
+              </div>
+              <div class="question-feedback mt-3"></div>
+            </div>
+
+            <!-- Questão 5 -->
+            <div
+              class="bg-white p-6 rounded-lg shadow-sm mb-6 question-container"
+            >
+              <p class="font-semibold mb-4">
+                Questão 5: Em um jogo de perguntas e respostas, cada acerto vale
+                +5 pontos, cada erro vale -3 pontos e cada pergunta não
+                respondida vale -1 ponto. Um participante respondeu a 20
+                perguntas. Ele acertou 9, errou 7 e deixou 4 sem resposta. Qual
+                foi a pontuação final desse participante?
+              </p>
+              <div class="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  class="start-timer-btn bg-green-600 text-white px-4 py-1 rounded-md text-sm"
+                >
+                  Iniciar Timer
+                </button>
+                <div class="question-timer text-lg font-bold text-red-600">
+                  03:00
+                </div>
+              </div>
+              <div class="space-y-3 options-container">
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q5" value="A" class="mr-3" /> (A)
+                  16</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q5" value="B" class="mr-3" /> (B)
+                  20</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q5" value="C" class="mr-3" /> (C)
+                  24</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q5" value="D" class="mr-3" /> (D)
+                  45</label
+                >
+                <label
+                  class="flex items-center p-3 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                  ><input type="radio" name="q5" value="E" class="mr-3" /> (E)
+                  62</label
+                >
+              </div>
+              <div class="question-feedback mt-3"></div>
+            </div>
+
+            <button
+              id="submit-btn"
+              type="button"
+              class="w-full bg-indigo-700 text-white font-bold py-3 rounded-lg text-lg hover:bg-indigo-800 transition-colors"
+            >
+              Finalizar e Ver Resultado
+            </button>
+          </form>
+        </section>
+
+        <!-- Seção de Resultado -->
+        <section
+          id="result-section"
+          class="hidden mt-10 text-center bg-white p-8 rounded-lg shadow-lg no-print"
+        >
+          <h2 class="text-3xl font-bold mb-4">Seu Desempenho</h2>
+          <p id="score" class="text-5xl font-bold text-indigo-700 mb-2"></p>
+          <p id="score-message" class="text-slate-600 text-lg"></p>
+        </section>
+
+        <!-- Seção de Gabarito Comentado -->
+        <section id="gabarito-section" class="hidden mt-12">
+          <h2 class="text-2xl font-bold border-b-2 border-indigo-200 pb-2 mb-4">
+            Gabarito e Resoluções Comentadas
+          </h2>
+
+          <div class="space-y-6">
+            <!-- Resolução 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h3 class="font-bold text-lg mb-2">
+                Questão 1 - Resposta Correta: (A)
+              </h3>
+              <p>
+                <strong>Raciocínio:</strong> Precisamos calcular a temperatura
+                em duas etapas. Primeiro, a temperatura ao meio-dia, somando a
+                elevação à temperatura inicial. Depois, a temperatura às 18h,
+                subtraindo a queda da temperatura do meio-dia.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 1: Calcular a temperatura ao meio-dia.</strong>
+                Operação: $(-3,5) + 10$. Sinais diferentes, subtraia e use o
+                sinal do maior. $10,0 - 3,5 = 6,5$. O maior é 10 (positivo),
+                então o resultado é **+6,5 °C**.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 2: Calcular a temperatura às 18h.</strong>
+                Operação: $(+6,5) - 8,5$. Sinais diferentes, subtraia e use o
+                sinal do maior. $8,5 - 6,5 = 2,0$. O maior é 8,5 (negativo na
+                operação), então o resultado é **-2,0 °C**.
+              </p>
+            </div>
+            <!-- Resolução 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h3 class="font-bold text-lg mb-2">
+                Questão 2 - Resposta Correta: (A)
+              </h3>
+              <p>
+                <strong>Raciocínio:</strong> Calcular o custo de cada item,
+                somar para ter o total da compra e subtrair de 50 para achar o
+                troco.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 1: Custo do fio elétrico.</strong> Operação: $3,5
+                \times 2,80 = 9,80$. Custo: **R$ 9,80**.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 2: Custo dos parafusos.</strong> Operação: $4
+                \times 5,25 = 21,00$. Custo: **R$ 21,00**.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 3: Custo total da compra.</strong> Operação: $9,80
+                + 21,00 = 30,80$. Total: **R$ 30,80**.
+              </p>
+              <p class="mt-2">
+                <strong>Passo 4: Calcular o troco.</strong> Operação: $50,00 -
+                30,80 = 19,20$. Troco: **R$ 19,20**.
+              </p>
+            </div>
+            <!-- Resolução 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h3 class="font-bold text-lg mb-2">
+                Questão 3 - Resposta Correta: (C)
+              </h3>
+              <p>
+                <strong>Raciocínio:</strong> O consumo médio é a distância
+                percorrida dividida pelo combustível consumido. O combustível
+                consumido é a quantidade usada para encher o tanque novamente.
+              </p>
+              <p class="mt-2">
+                <strong>Operação:</strong> $422,5 \div 32,5$. Para facilitar,
+                igualamos as casas decimais e removemos a vírgula: $4225 \div
+                325$.
+              </p>
+              <p class="mt-2">
+                <strong>Cálculo:</strong> $4225 \div 325 = 13$. O consumo foi de
+                **13 km/L**.
+              </p>
+            </div>
+            <!-- Resolução 4 -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h3 class="font-bold text-lg mb-2">
+                Questão 4 - Resposta Correta: (A)
+              </h3>
+              <p>
+                <strong>Raciocínio:</strong> É uma sequência de adições e
+                subtrações com inteiros. "Subir" é somar, "descer" é subtrair. O
+                ponto de partida é -3.
+              </p>
+              <ul class="list-decimal list-inside mt-2 space-y-1">
+                <li><strong>Partida:</strong> -3</li>
+                <li><strong>Sobe 11:</strong> $-3 + 11 = +8$</li>
+                <li><strong>Desce 5:</strong> $+8 - 5 = +3$</li>
+                <li><strong>Desce 7:</strong> $+3 - 7 = -4$</li>
+                <li><strong>Sobe 2:</strong> $-4 + 2 = -2$</li>
+              </ul>
+              <p class="mt-2">O andar final é o **-2 (2º subsolo)**.</p>
+            </div>
+            <!-- Resolução 5 -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h3 class="font-bold text-lg mb-2">
+                Questão 5 - Resposta Correta: (B)
+              </h3>
+              <p>
+                <strong>Raciocínio:</strong> Calcular os pontos de cada
+                categoria (acertos, erros, não respondidas) e somar tudo.
+              </p>
+              <p class="mt-2">
+                <strong>Pontos dos acertos:</strong> $9 \times (+5) = \text{+45
+                pontos}$.
+              </p>
+              <p class="mt-2">
+                <strong>Pontos dos erros:</strong> $7 \times (-3) = \text{-21
+                pontos}$.
+              </p>
+              <p class="mt-2">
+                <strong>Pontos das não respondidas:</strong> $4 \times (-1) =
+                \text{-4 pontos}$.
+              </p>
+              <p class="mt-2">
+                <strong>Pontuação final:</strong> $(+45) + (-21) + (-4) = 45 -
+                25 = \text{20 pontos}$.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer
+        class="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 no-print"
+      >
+        <a
+          href="aulas.html"
+          class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors text-center"
+          >Voltar ao Menu de Aulas</a
+        >
+        <button
+          id="print-btn"
+          class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+        >
+          Salvar como PDF ou Imprimir
+        </button>
+      </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const finalizarBtn = document.getElementById('finalizarBtn');
-            const printBtnFinal = document.getElementById('printBtnFinal');
-            const quizForm = document.getElementById('quizForm');
-            const resultadoDiv = document.getElementById('resultado');
-            const gabaritoDiv = document.getElementById('gabarito');
-            
-            // Gabarito e Timers
-            const correctAnswers = ['C', 'B', 'D', 'D', 'A'];
-            const totalQuestions = correctAnswers.length;
-            const questionTimers = [];
+      document.addEventListener('DOMContentLoaded', function () {
+        // --- Pomodoro Timer Logic ---
+        const pomodoroDisplay = document.getElementById('pomodoro-timer')
+        const startPomodoroBtn = document.getElementById('start-pomodoro')
+        const pausePomodoroBtn = document.getElementById('pause-pomodoro')
+        const resetPomodoroBtn = document.getElementById('reset-pomodoro')
 
-            // --- Lógica do Timer Pomodoro ---
-            const pomodoroDisplay = document.getElementById('pomodoroDisplay');
-            const startPomodoroBtn = document.getElementById('startPomodoro');
-            const pausePomodoroBtn = document.getElementById('pausePomodoro');
-            const resetPomodoroBtn = document.getElementById('resetPomodoro');
-            let pomodoroInterval;
-            let pomodoroTime = 25 * 60; // 25 minutos em segundos
-            let isPomodoroPaused = true;
+        let pomodoroInterval
+        let pomodoroTime = 25 * 60 // 25 minutes
+        let isPomodoroPaused = true
+        let isPomodoroBreak = false
 
-            function updatePomodoroDisplay() {
-                const minutes = Math.floor(pomodoroTime / 60);
-                const seconds = pomodoroTime % 60;
-                pomodoroDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }
+        function updatePomodoroDisplay() {
+          const minutes = Math.floor(pomodoroTime / 60)
+          const seconds = pomodoroTime % 60
+          pomodoroDisplay.textContent = `${minutes
+            .toString()
+            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+        }
 
-            function startPomodoro() {
-                if (isPomodoroPaused) {
-                    isPomodoroPaused = false;
-                    pomodoroInterval = setInterval(() => {
-                        pomodoroTime--;
-                        updatePomodoroDisplay();
-                        if (pomodoroTime <= 0) {
-                            clearInterval(pomodoroInterval);
-                            alert("Tempo de foco concluído! Faça uma pausa de 5 minutos.");
-                        }
-                    }, 1000);
+        function startPomodoro() {
+          if (isPomodoroPaused) {
+            isPomodoroPaused = false
+            pomodoroInterval = setInterval(() => {
+              pomodoroTime--
+              updatePomodoroDisplay()
+              if (pomodoroTime <= 0) {
+                clearInterval(pomodoroInterval)
+                isPomodoroBreak = !isPomodoroBreak
+                pomodoroTime = isPomodoroBreak ? 5 * 60 : 25 * 60
+                alert(
+                  isPomodoroBreak
+                    ? 'Hora da pausa! (5 minutos)'
+                    : 'Pausa terminada. Hora de focar!'
+                )
+                updatePomodoroDisplay()
+                isPomodoroPaused = true
+              }
+            }, 1000)
+          }
+        }
+
+        function pausePomodoro() {
+          isPomodoroPaused = true
+          clearInterval(pomodoroInterval)
+        }
+
+        function resetPomodoro() {
+          pausePomodoro()
+          isPomodoroBreak = false
+          pomodoroTime = 25 * 60
+          updatePomodoroDisplay()
+        }
+
+        startPomodoroBtn.addEventListener('click', startPomodoro)
+        pausePomodoroBtn.addEventListener('click', pausePomodoro)
+        resetPomodoroBtn.addEventListener('click', resetPomodoro)
+
+        // --- Quiz Timer Logic ---
+        const questionContainers = document.querySelectorAll(
+          '.question-container'
+        )
+        const timePerQuestion = 180 // 3 minutes
+
+        questionContainers.forEach((container) => {
+          const startBtn = container.querySelector('.start-timer-btn')
+          const timerDisplay = container.querySelector('.question-timer')
+          const optionsContainer = container.querySelector('.options-container')
+          let timerInterval
+          let timeLeft = timePerQuestion
+          let timerActive = false
+
+          function updateQuestionTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60)
+            const seconds = timeLeft % 60
+            timerDisplay.textContent = `${minutes
+              .toString()
+              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+          }
+
+          startBtn.addEventListener('click', () => {
+            if (timerActive) return
+            timerActive = true
+            startBtn.classList.add('hidden')
+            timerInterval = setInterval(() => {
+              timeLeft--
+              updateQuestionTimerDisplay()
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval)
+                timerDisplay.textContent = 'Tempo Esgotado!'
+                optionsContainer.classList.add('locked')
+                // Mark as incorrect if no answer is selected
+                const radioName = optionsContainer.querySelector(
+                  'input[type="radio"]'
+                ).name
+                const selectedRadio = document.querySelector(
+                  `input[name="${radioName}"]:checked`
+                )
+                if (!selectedRadio) {
+                  const feedbackEl =
+                    container.querySelector('.question-feedback')
+                  feedbackEl.textContent =
+                    'Tempo esgotado! A questão foi considerada errada.'
+                  feedbackEl.className = 'question-feedback incorrect-feedback'
                 }
+              }
+            }, 1000)
+          })
+        })
+
+        // --- Quiz Submission Logic ---
+        const submitBtn = document.getElementById('submit-btn')
+        const quizForm = document.getElementById('quiz-form')
+        const resultSection = document.getElementById('result-section')
+        const gabaritoSection = document.getElementById('gabarito-section')
+        const scoreEl = document.getElementById('score')
+        const scoreMessageEl = document.getElementById('score-message')
+
+        const correctAnswers = { q1: 'A', q2: 'A', q3: 'C', q4: 'A', q5: 'B' }
+        const totalQuestions = Object.keys(correctAnswers).length
+
+        submitBtn.addEventListener('click', () => {
+          let score = 0
+
+          // Stop all question timers
+          document
+            .querySelectorAll('.question-container')
+            .forEach((container) => {
+              const timerInterval = container.timerInterval // This needs to be stored on the element to be cleared
+              if (timerInterval) clearInterval(timerInterval)
+            })
+
+          for (const questionName in correctAnswers) {
+            const container = document
+              .querySelector(`input[name="${questionName}"]`)
+              .closest('.question-container')
+            const optionsContainer =
+              container.querySelector('.options-container')
+            const feedbackEl = container.querySelector('.question-feedback')
+            const radios = document.getElementsByName(questionName)
+            const correctAnswer = correctAnswers[questionName]
+            let userAnswer = null
+
+            radios.forEach((radio) => {
+              if (radio.checked) {
+                userAnswer = radio.value
+              }
+            })
+
+            const correctLabel = document.querySelector(
+              `input[name="${questionName}"][value="${correctAnswer}"]`
+            ).parentElement
+            correctLabel.classList.add('correct-answer')
+
+            if (userAnswer) {
+              const userLabel = document.querySelector(
+                `input[name="${questionName}"]:checked`
+              ).parentElement
+              if (userAnswer === correctAnswer) {
+                score++
+                feedbackEl.textContent = 'Resposta Correta!'
+                feedbackEl.className = 'question-feedback correct-feedback'
+              } else {
+                userLabel.classList.add('incorrect-answer')
+                feedbackEl.textContent = `Incorreto. A resposta certa é (${correctAnswer}).`
+                feedbackEl.className = 'question-feedback incorrect-feedback'
+              }
+            } else {
+              // No answer or time ran out
+              if (!optionsContainer.classList.contains('locked')) {
+                feedbackEl.textContent = `Você não respondeu. A resposta certa é (${correctAnswer}).`
+                feedbackEl.className = 'question-feedback incorrect-feedback'
+              }
             }
 
-            function pausePomodoro() {
-                isPomodoroPaused = true;
-                clearInterval(pomodoroInterval);
-            }
+            optionsContainer.classList.add('locked') // Lock options after submission
+          }
 
-            function resetPomodoro() {
-                pausePomodoro();
-                pomodoroTime = 25 * 60;
-                updatePomodoroDisplay();
-            }
+          // Display results
+          scoreEl.textContent = `${score} / ${totalQuestions}`
+          let message = ''
+          const percentage = (score / totalQuestions) * 100
+          if (percentage === 100) {
+            message = 'Excelente! Você gabaritou. Continue assim!'
+          } else if (percentage >= 60) {
+            message = 'Ótimo desempenho! Você está no caminho certo.'
+          } else if (percentage >= 40) {
+            message =
+              'Bom esforço. Revise as resoluções para fortalecer os pontos fracos.'
+          } else {
+            message =
+              'Não desanime! A base é fundamental. Refaça a aula e os exercícios com atenção.'
+          }
+          scoreMessageEl.textContent = message
 
-            startPomodoroBtn.addEventListener('click', startPomodoro);
-            pausePomodoroBtn.addEventListener('click', pausePomodoro);
-            resetPomodoroBtn.addEventListener('click', resetPomodoro);
-            updatePomodoroDisplay();
+          resultSection.classList.remove('hidden')
+          gabaritoSection.classList.remove('hidden')
+          submitBtn.disabled = true
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed')
 
-            // --- Lógica dos Timers das Questões ---
-            function setupQuestionTimer(questionNumber) {
-                const startBtn = document.getElementById(`start-timer-q${questionNumber}`);
-                const display = document.getElementById(`timer-q${questionNumber}`);
-                let duration = 3 * 60; // 3 minutos
-                let interval;
+          resultSection.scrollIntoView({ behavior: 'smooth' })
+        })
 
-                startBtn.addEventListener('click', function() {
-                    this.disabled = true; // Desabilita o botão de iniciar
-                    
-                    interval = setInterval(() => {
-                        duration--;
-                        const minutes = Math.floor(duration / 60);
-                        const seconds = duration % 60;
-                        display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-                        if (duration <= 0) {
-                            clearInterval(interval);
-                            display.textContent = "Esgotado";
-                            // Bloquear as opções da questão
-                            const optionsDiv = document.getElementById(`options-q${questionNumber}`);
-                            const labels = optionsDiv.querySelectorAll('label');
-                            const inputs = optionsDiv.querySelectorAll('input');
-                            labels.forEach(label => label.classList.add('disabled'));
-                            inputs.forEach(input => input.disabled = true);
-                        }
-                    }, 1000);
-                    questionTimers[questionNumber - 1] = interval;
-                });
-            }
-            
-            for (let i = 1; i <= totalQuestions; i++) {
-                setupQuestionTimer(i);
-            }
-
-
-            // --- Lógica do Quiz ---
-            finalizarBtn.addEventListener('click', function() {
-                // Parar todos os timers das questões
-                questionTimers.forEach(interval => {
-                    if (interval) clearInterval(interval);
-                });
-
-                let score = 0;
-                
-                const allInputs = quizForm.querySelectorAll('input[type="radio"]');
-                allInputs.forEach(input => {
-                    if (!input.disabled) { // Desabilita apenas os que não foram desabilitados pelo timer
-                        input.disabled = true;
-                    }
-                });
-
-                for (let i = 1; i <= totalQuestions; i++) {
-                    const questionName = 'q' + i;
-                    const userAnswerNode = quizForm.querySelector(`input[name="${questionName}"]:checked`);
-                    
-                    const correctAnswer = correctAnswers[i-1];
-                    const labels = document.querySelectorAll(`#q${i}-container label`);
-                    let correctLabel = null;
-                    labels.forEach(label => {
-                        if(label.querySelector('input').value === correctAnswer) {
-                            correctLabel = label;
-                        }
-                    });
-
-                    if (userAnswerNode) { // Verifica se o usuário respondeu
-                        const userLabel = userAnswerNode.parentElement;
-                        if (userAnswerNode.value === correctAnswer) {
-                            score++;
-                            userLabel.classList.add('correct');
-                        } else {
-                            userLabel.classList.add('incorrect');
-                            if(correctLabel) correctLabel.classList.add('correct');
-                        }
-                    } else { // Se não respondeu (seja por tempo ou por escolha)
-                         if(correctLabel) correctLabel.classList.add('correct'); // Apenas marca a correta
-                    }
-                }
-
-                const percentage = (score / totalQuestions) * 100;
-                resultadoDiv.innerHTML = `Você acertou ${score} de ${totalQuestions} questões (${percentage.toFixed(0)}%)`;
-                
-                if(percentage >= 60){
-                    resultadoDiv.className = 'resultado-acerto';
-                } else {
-                    resultadoDiv.className = 'resultado-erro';
-                }
-                
-                resultadoDiv.classList.remove('hidden');
-                gabaritoDiv.classList.remove('hidden');
-                finalizarBtn.disabled = true;
-                finalizarBtn.style.display = 'none'; // Esconde o botão de finalizar
-            });
-
-            if (printBtnFinal) {
-                printBtnFinal.addEventListener('click', function() {
-                    window.print();
-                });
-            }
-        });
+        // --- Print Logic ---
+        const printBtn = document.getElementById('print-btn')
+        printBtn.addEventListener('click', () => {
+          window.print()
+        })
+      })
     </script>
-
-</body>
+  </body>
 </html>
