@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Professor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --cor-fundo: #F4F4F6;
+            --cor-container: #FFFFFF;
+            --cor-texto-principal: #333A45;
+            --cor-texto-sutil: #7A8291;
+            --cor-borda: #EAEBEE;
+            --cor-acento: #00A8FF;
+            --cor-acento-hover: #008DD1;
+            --cor-sucesso: #28a745;
+            --cor-alerta: #ffc107;
+            --cor-perigo: #dc3545;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            margin: 0;
+            overflow: hidden;
+        }
+        .header {
+            background-color: var(--cor-container);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--cor-borda);
+            height: 81px;
+            position: relative;
+            z-index: 10;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--cor-acento);
+            margin: 0;
+        }
+        .profile-container {
+            position: relative;
+        }
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50px;
+            transition: background-color 0.2s;
+        }
+        .user-profile-badge:hover {
+            background-color: var(--cor-fundo);
+        }
+        #teacher-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        #teacher-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--cor-borda);
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background-color: var(--cor-container);
+            border: 1px solid var(--cor-borda);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 160px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+        #logout-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: none;
+            border: none;
+            color: var(--cor-texto-principal);
+            padding: 12px 15px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        #logout-button:hover {
+            background-color: var(--cor-fundo);
+        }
+        
+        .dashboard-container {
+            display: flex;
+            height: calc(100vh - 81px);
+        }
+        .sidebar {
+            width: 380px;
+            background-color: var(--cor-container);
+            border-right: 1px solid var(--cor-borda);
+            padding: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            margin-bottom: 20px; /* Aumentado o espaçamento inferior */
+            font-size: 1.2rem;
+        }
+        #essay-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #essay-list li {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid var(--cor-borda);
+            transition: all 0.2s;
+            border-left: 5px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #essay-list li:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+        #essay-list li.active {
+            background-color: #eef8ff;
+            border-left-color: var(--cor-acento);
+            box-shadow: 0 4px 15px rgba(0, 168, 255, 0.1);
+        }
+        .essay-item-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .student-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .student-info .student-name { font-weight: 600; }
+        .student-info .submission-date { font-size: 0.8rem; color: var(--cor-texto-sutil); margin-top: 2px; }
+        
+        .status-tag {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            text-transform: capitalize;
+            flex-shrink: 0;
+        }
+        .status-tag.corrigida { background-color: var(--cor-sucesso); }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: hidden;
+            height: 100%;
+        }
+        .placeholder {
+            text-align: center;
+            color: var(--cor-texto-sutil);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        #essay-details-wrapper {
+            display: none;
+            height: 100%;
+            gap: 20px;
+        }
+        .essay-viewer-pane {
+            flex: 1;
+            min-width: 0;
+            background-color: var(--cor-container);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid var(--cor-borda);
+        }
+        #essay-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .evaluation-pane {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .detail-box {
+            background-color: var(--cor-container);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--cor-borda);
+        }
+        .detail-box h3 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .feedback-section { margin-top: 25px; }
+        .feedback-section h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: var(--cor-texto-principal);
+            display: flex;
+            align-items: center;
+        }
+        .feedback-section p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--cor-texto-sutil);
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+        .detail-box h3 i, .feedback-section h4 i {
+            margin-right: 12px;
+            width: 22px;
+            text-align: center;
+        }
+        .detail-box h3 .fa-robot { color: var(--cor-acento); }
+        .feedback-section .fa-thumbs-up { color: var(--cor-sucesso); }
+        .feedback-section .fa-magnifying-glass-chart { color: var(--cor-perigo); }
+        .feedback-section .fa-lightbulb { color: var(--cor-alerta); }
+        
+        .grades-container-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .grade-item-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .grade-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        .grade-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            background-color: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 6px;
+            min-width: 50px;
+            text-align: center;
+        }
+        .grade-item-list.total {
+            background-color: #eef8ff;
+            border: 1px solid var(--cor-acento);
+            padding: 15px;
+        }
+        .grade-item-list.total .grade-label { font-size: 1.1rem; }
+        .grade-item-list.total .grade-value {
+            font-size: 1.4rem;
+            color: var(--cor-acento);
+            background-color: transparent;
+        }
+        .info-icon {
+            color: #b0b8c5;
+            cursor: pointer;
+            position: relative;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 280px;
+            background-color: var(--cor-container);
+            color: var(--cor-texto-principal);
+            text-align: left;
+            border-radius: 8px;
+            padding: 15px;
+            position: absolute;
+            z-index: 10;
+            top: 50%;
+            left: 170%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            line-height: 1.6;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--cor-borda);
+            pointer-events: none;
+        }
+        .tooltip-text b {
+            font-weight: 600;
+            color: var(--cor-acento);
+            display: block;
+            margin-bottom: 5px;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            margin-top: -7px;
+            border-width: 7px;
+            border-style: solid;
+            border-color: transparent var(--cor-container) transparent transparent;
+        }
+        .tooltip-text::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            margin-top: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent var(--cor-borda) transparent transparent;
+        }
+        .info-icon:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(-50%) translateX(10px);
+        }
+        
+        #grades-header {
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-grades-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-180deg);
+            color: var(--cor-texto-sutil);
+            transition: transform 0.4s ease;
+        }
+        .toggle-grades-btn.collapsed {
+            transform: translateY(-50%) rotate(0deg);
+        }
+        .competency-icon {
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+            color: var(--cor-texto-sutil);
+        }
+        #collapsible-grades {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, margin-bottom 0.4s ease-in-out, gap 0.4s ease-in-out;
+            margin-bottom: 0;
+        }
+        #collapsible-grades.expanded {
+            max-height: 500px;
+            margin-bottom: 15px;
+        }
+        .evaluation-pane::-webkit-scrollbar { width: 8px; }
+        .evaluation-pane::-webkit-scrollbar-track { background: var(--cor-fundo); border-radius: 4px; }
+        .evaluation-pane::-webkit-scrollbar-thumb { background-color: #cdd2da; border-radius: 4px; border: 2px solid var(--cor-fundo); }
+        .evaluation-pane::-webkit-scrollbar-thumb:hover { background-color: #b0b8c5; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Painel de Correção</h1>
+        <div class="profile-container">
+            <div class="user-profile-badge" id="profile-trigger">
+                <span id="teacher-name"></span>
+                <img id="teacher-avatar" src="" alt="Avatar do Professor">
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <button id="logout-button">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Sair</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <h2>Redações Recebidas</h2>
+            <ul id="essay-list">
+                </ul>
+        </aside>
+        <main class="main-content">
+            <div id="placeholder" class="placeholder">
+                <i class="fa-regular fa-file-lines"></i>
+                <p>Selecione uma redação na lista para visualizar.</p>
+            </div>
+            <div id="essay-details-wrapper">
+                <div class="essay-viewer-pane">
+                    <img id="essay-image" src="" alt="Imagem da Redação">
+                </div>
+                <div class="evaluation-pane">
+                    <div class="detail-box" id="ai-evaluation-box">
+                        <h3 id="grades-header">
+                            <i class="fa-solid fa-robot"></i>
+                            Avaliação da Inteligência Artificial
+                            <i class="fa-solid fa-chevron-down toggle-grades-btn"></i>
+                        </h3>
+                        
+                        <div class="grades-container-list">
+                            <div id="collapsible-grades">
+                                <div class="grade-item-list">
+                                    <div class="grade-label">
+                                        <i class="fa-solid fa-spell-check competency-icon"></i>
+                                        <span class="label-text">Norma Culta</span>
+                                        <i class="fa-solid fa-circle-info info-icon">
+                                            <span class="tooltip-text"><b>Competência 1:</b>Demonstrar domínio da modalidade escrita formal da Língua Portuguesa.</span>
+                                        </i>
+                                    </div>
+                                    <span class="grade-value" id="ia-grade-c1">--</span>
+                                </div>
+                                <div class="grade-item-list">
+                                    <div class="grade-label">
+                                        <i class="fa-solid fa-book-open-reader competency-icon"></i>
+                                        <span class="label-text">Tema e Estrutura</span>
+                                        <i class="fa-solid fa-circle-info info-icon">
+                                            <span class="tooltip-text"><b>Competência 2:</b>Compreender o tema e aplicar conceitos das áreas de conhecimento para desenvolver o tema na estrutura dissertativo-argumentativa.</span>
+                                        </i>
+                                    </div>
+                                    <span class="grade-value" id="ia-grade-c2">--</span>
+                                </div>
+                                <div class="grade-item-list">
+                                    <div class="grade-label">
+                                        <i class="fa-solid fa-sitemap competency-icon"></i>
+                                        <span class="label-text">Argumentação</span>
+                                        <i class="fa-solid fa-circle-info info-icon">
+                                            <span class="tooltip-text"><b>Competência 3:</b>Selecionar, relacionar, organizar e interpretar informações, fatos, opiniões e argumentos em defesa de um ponto de vista.</span>
+                                        </i>
+                                    </div>
+                                    <span class="grade-value" id="ia-grade-c3">--</span>
+                                </div>
+                                <div class="grade-item-list">
+                                    <div class="grade-label">
+                                        <i class="fa-solid fa-link competency-icon"></i>
+                                        <span class="label-text">Coesão</span>
+                                        <i class="fa-solid fa-circle-info info-icon">
+                                            <span class="tooltip-text"><b>Competência 4:</b>Demonstrar conhecimento dos mecanismos linguísticos necessários para a construção da argumentação.</span>
+                                        </i>
+                                    </div>
+                                    <span class="grade-value" id="ia-grade-c4">--</span>
+                                </div>
+                                <div class="grade-item-list">
+                                    <div class="grade-label">
+                                        <i class="fa-solid fa-hands-holding-child competency-icon"></i>
+                                        <span class="label-text">Proposta</span>
+                                        <i class="fa-solid fa-circle-info info-icon">
+                                            <span class="tooltip-text"><b>Competência 5:</b>Elaborar proposta de intervenção para o problema abordado, respeitando os direitos humanos.</span>
+                                        </i>
+                                    </div>
+                                    <span class="grade-value" id="ia-grade-c5">--</span>
+                                </div>
+                            </div>
+                            <div class="grade-item-list total">
+                                <div class="grade-label">
+                                    <span class="label-text"><b>Nota Total</b></span>
+                                </div>
+                                <span class="grade-value" id="ia-grade-total">--</span>
+                            </div>
+                        </div>
+
+                        <div class="feedback-section">
+                            <h4><i class="fa-solid fa-thumbs-up"></i> Pontos Positivos</h4>
+                            <p id="ia-feedback-positive"></p>
+                        </div>
+                        <div class="feedback-section">
+                            <h4><i class="fa-solid fa-magnifying-glass-chart"></i> Defasagens Encontradas</h4>
+                            <p id="ia-feedback-difficulties"></p>
+                        </div>
+                        <div class="feedback-section">
+                            <h4><i class="fa-solid fa-lightbulb"></i> Sugestões de Melhoria</h4>
+                            <p id="ia-feedback-suggestions"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const APP_STORAGE_KEY = 'perfilUser';
+
+        function getAppData() {
+            try {
+                const rawData = localStorage.getItem(APP_STORAGE_KEY);
+                return rawData ? JSON.parse(rawData) : null;
+            } catch (e) {
+                console.error("Falha ao ler os dados do localStorage", e);
+                return null;
+            }
+        }
+        
+        const essayList = document.getElementById('essay-list');
+        const essayDetailsWrapper = document.getElementById('essay-details-wrapper');
+        const placeholder = document.getElementById('placeholder');
+        const profileTrigger = document.getElementById('profile-trigger');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const logoutButton = document.getElementById('logout-button');
+
+        let allEssays = [];
+        let currentEssayId = null;
+        let unsubscribe;
+
+        function listenForEssays() {
+            const essaysRef = collection(db, "essays");
+            const q = query(essaysRef, orderBy("submissionDate", "desc"));
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                allEssays = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderEssayList();
+                
+                if (currentEssayId) {
+                    const updatedEssay = allEssays.find(e => e.id === currentEssayId);
+                    if (updatedEssay) {
+                        displayEssayDetails(currentEssayId, false);
+                    } else {
+                        showPlaceholder();
+                    }
+                }
+            }, (error) => console.error("Erro ao buscar redações: ", error));
+        }
+
+        function renderEssayList() {
+            essayList.innerHTML = '';
+
+            if (allEssays.length === 0) {
+                essayList.innerHTML = '<p style="text-align: center; color: var(--cor-texto-sutil); padding: 20px 0;">Nenhuma redação foi enviada ainda.</p>';
+                return;
+            }
+
+            allEssays.forEach(essay => {
+                const li = document.createElement('li');
+                li.dataset.id = essay.id;
+                if (essay.id === currentEssayId) li.classList.add('active');
+                
+                const date = essay.submissionDate?.toDate().toLocaleDateString('pt-BR') || 'Data indisponível';
+                const displayStatus = 'Corrigido';
+                const statusClass = 'corrigida';
+                
+                const studentAvatar = essay.studentAvatar || 'assets/default-avatar.png';
+
+                li.innerHTML = `
+                    <div class="essay-item-main">
+                        <img src="${studentAvatar}" alt="Avatar do Aluno" class="student-avatar">
+                        <div class="student-info">
+                            <div class="student-name">${essay.studentName}</div>
+                            <div class="submission-date">Enviado em: ${date}</div>
+                        </div>
+                    </div>
+                    <span class="status-tag ${statusClass}">${displayStatus}</span>
+                `;
+                li.addEventListener('click', () => displayEssayDetails(essay.id));
+                essayList.appendChild(li);
+            });
+        }
+        
+        function showPlaceholder() {
+            currentEssayId = null;
+            placeholder.style.display = 'flex';
+            essayDetailsWrapper.style.display = 'none';
+            document.querySelectorAll('#essay-list li').forEach(item => item.classList.remove('active'));
+        }
+
+        function displayEssayDetails(id, scrollIntoView = true) {
+            currentEssayId = id;
+            const essay = allEssays.find(e => e.id === id);
+            if (!essay) return;
+
+            document.querySelectorAll('#essay-list li').forEach(item => {
+                item.classList.toggle('active', item.dataset.id === id);
+            });
+            
+            if (scrollIntoView) {
+                const activeItem = document.querySelector(`#essay-list li[data-id="${id}"]`);
+                activeItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            placeholder.style.display = 'none';
+            essayDetailsWrapper.style.display = 'flex';
+
+            document.getElementById('essay-image').src = essay.essayImageURL;
+            
+            document.getElementById('ia-grade-c1').textContent = essay.grades?.competencia1 ?? '--';
+            document.getElementById('ia-grade-c2').textContent = essay.grades?.competencia2 ?? '--';
+            document.getElementById('ia-grade-c3').textContent = essay.grades?.competencia3 ?? '--';
+            document.getElementById('ia-grade-c4').textContent = essay.grades?.competencia4 ?? '--';
+            document.getElementById('ia-grade-c5').textContent = essay.grades?.competencia5 ?? '--';
+            document.getElementById('ia-grade-total').textContent = essay.grades?.total ?? '--';
+            
+            document.getElementById('ia-feedback-positive').textContent = essay.feedback?.positive ?? 'Não disponível.';
+            document.getElementById('ia-feedback-difficulties').textContent = essay.feedback?.difficulties ?? 'Não disponível.';
+            document.getElementById('ia-feedback-suggestions').textContent = essay.feedback?.suggestions ?? 'Não disponível.';
+        }
+        
+        function initializeApp() {
+            const appData = getAppData();
+            
+            if (!appData || !appData.userData || appData.userData.role !== 'teacher') {
+                alert('Acesso negado. Esta página é restrita a professores.');
+                localStorage.removeItem(APP_STORAGE_KEY);
+                window.location.href = '../index.html';
+                return;
+            }
+
+            console.log("Acesso de professor autorizado.");
+            
+            const teacherData = appData.userData;
+            document.getElementById('teacher-name').textContent = teacherData.name;
+            if (teacherData.avatar) {
+                document.getElementById('teacher-avatar').src = teacherData.avatar;
+            } else {
+                document.getElementById('teacher-avatar').src = 'assets/default-avatar.png'; 
+            }
+            
+            listenForEssays();
+
+            const gradesHeader = document.getElementById('grades-header');
+            const collapsibleGrades = document.getElementById('collapsible-grades');
+            const toggleIcon = gradesHeader.querySelector('.toggle-grades-btn');
+
+            gradesHeader.addEventListener('click', () => {
+                const isExpanded = collapsibleGrades.classList.toggle('expanded');
+                toggleIcon.style.transform = isExpanded ? 'translateY(-50%) rotate(0deg)' : 'translateY(-50%) rotate(-180deg)';
+                toggleIcon.classList.toggle('collapsed', !isExpanded);
+            });
+
+            profileTrigger.addEventListener('click', (event) => {
+                event.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+
+            window.addEventListener('click', () => {
+                if (profileDropdown.classList.contains('show')) {
+                    profileDropdown.classList.remove('show');
+                }
+            });
+
+            logoutButton.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    localStorage.removeItem(APP_STORAGE_KEY);
+                    window.location.href = '../index.html';
+                }).catch((error) => {
+                    console.error('Erro ao fazer logout:', error);
+                    alert('Ocorreu um erro ao sair.');
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+</body>
+</html>
